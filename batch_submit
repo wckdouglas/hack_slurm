@@ -1,0 +1,4 @@
+#!/bin/bash
+
+OPTIONS=$@
+ls | grep '.slurm$' | xargs sbatch ${OPTIONS}

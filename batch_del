@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ $# != 1 ]
+then
+	echo usags: $0 jobname
+	exit
+fi
+
+PATTERN=$1
+squeue -u $USER | grep $PATTERN | awk '{print $1}' | xargs -n1 scancel $JID
