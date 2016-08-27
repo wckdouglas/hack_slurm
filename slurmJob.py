@@ -3,18 +3,20 @@
 import fileinput
 import argparse
 import os
+import subprocess
 
 def writeJob(commandlist, jobname, commandRank, numberOfJob, numberOfNode, allocation, queue, time, concurrent_job):
     commandFiles = 'command_%i.bash' %commandRank
     options = \
 	"#!/bin/bash \n" +\
-	"#SBATCH -J  %s_%i # Job name \n"                             %(jobname, commandRank) +\
-	"#SBATCH -N  %i   # Total number of nodes \n"                 %(numberOfNode)+\
-	"#SBATCH -n  %i   # Total number of tasks\n"                  %(numberOfJob)+\
-	"#SBATCH -p %s    # Queue name \n"                            %(queue)+\
-	"#SBATCH -o %s_%i.o%s # Name of stdout output file \n"        %(jobname,commandRank,'%j')+ \
-	"#SBATCH -t  %s           # Run time (hh:mm:ss) \n"           %time +\
-	"#SBATCH -A %s \nmodule load gcc\n"                                            %(allocation) 
+	"#SBATCH -J %s # Job name \n"                       %(jobname) +\
+	"#SBATCH -N %i   # Total number of nodes \n"        %(numberOfNode)+\
+	"#SBATCH -n %i   # Total number of tasks\n"         %(numberOfJob)+\
+	"#SBATCH -p %s    # Queue name \n"                  %(queue)+\
+	"#SBATCH -o %s.o%s # Name of stdout output file \n" %(jobname,'%j')+ \
+	"#SBATCH -t %s # Run time (hh:mm:ss) \n"            %time +\
+	"#SBATCH -A %s \nmodule load gcc\n"                           %(allocation)  +\
+        "export PATH=%s:$PATH\n"  %('/'.join(subprocess.check_output(['which' ,'python']).split('/')[:-1]))
     with open('launcher_%i.slurm' %(commandRank), 'w') as slurmFile:
 	slurmFile.write(options)
         slurmFile.write('parallel -j%i :::: %s \n' %(concurrent_job,commandFiles))
