@@ -19,7 +19,10 @@ def writeJob(commandlist, jobname, commandRank, numberOfJob, numberOfNode, alloc
         "export PATH=%s:$PATH\n"  %('/'.join(subprocess.check_output(['which' ,'python']).split('/')[:-1]))
     with open('launcher_%i.slurm' %(commandRank), 'w') as slurmFile:
 	slurmFile.write(options)
-        slurmFile.write('parallel -j%i :::: %s \n' %(concurrent_job,commandFiles))
+        if concurrent_job == 1:
+            slurmFile.write('bash %s \n' %(concurrent_job,commandFiles)) 
+        else:
+            slurmFile.write('parallel -j%i :::: %s \n' %(concurrent_job,commandFiles)) 
     with open(commandFiles,'w') as commandFile:
         commandFile.write('\n'.join(commandlist) + '\n')
     return 0
