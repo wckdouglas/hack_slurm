@@ -20,7 +20,7 @@ def writeJob(commandlist, jobname, commandRank, numberOfJob, numberOfNode, alloc
     with open('launcher_%i.slurm' %(commandRank), 'w') as slurmFile:
 	slurmFile.write(options)
         if concurrent_job == 1:
-            slurmFile.write('bash %s \n' %(concurrent_job,commandFiles)) 
+            slurmFile.write('bash %s \n' %(commandFiles)) 
         else:
             slurmFile.write('parallel -j%i :::: %s \n' %(concurrent_job,commandFiles)) 
     with open(commandFiles,'w') as commandFile:
