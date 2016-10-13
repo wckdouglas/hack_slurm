@@ -53,14 +53,17 @@ def main(args):
     	writeJob(commandlist, jobname, commandRank, i, numberOfNode, allocation, queue, time, concurrent_job)
         commandRank += 1
     print 'Written %i scripts' %commandRank
+    return 0
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='A script to create slurm scripts from list of commands')
 	parser.add_argument('-c', '--cmdlst', help='A list of command, each line is a command', required=True)
 	parser.add_argument('-j', '--jobname', default='job',help='Jobname (default: job)')
-	parser.add_argument('-N', '--numberOfNode', default=1, type=int, help='Number of node for each command (default: 1)')
-	parser.add_argument('-n', '--numberOfJob', default=1, type=int, help='Number of job per node (default: 1)')
-	parser.add_argument('-A', '--allocation', default = '2013lambowitz', help= 'Account (default: 2013lambowitz)', choices = {'tRNA-profiling-and-b', '2013lambowitz', 'Exosome-RNA-seq'})
+	parser.add_argument('-N', '--numberOfNode', default=1, type=int, help='Number of node for each job (default: 1)')
+	parser.add_argument('-n', '--numberOfCmd', default=1, type=int, help='Number of command per node (default: 1)')
+	parser.add_argument('-A', '--allocation', default = '2013lambowitz', 
+                help= 'Account (default: 2013lambowitz)', 
+                choices = {'tRNA-profiling-and-b', '2013lambowitz', 'Exosome-RNA-seq'})
 	parser.add_argument('-t', '--time', default='01:00:00', help='Run time (hh:mm:ss) default: 1:00:00')
 	parser.add_argument('-q','--queue', default='normal',help='Queue (default: normal)')
         parser.add_argument('-p','--processes', default=24,help='How many process to run in the same time (default: 24)', type=int)
