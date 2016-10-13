@@ -2,8 +2,6 @@
 
 This repository hosted scripts that I created to make use of multicores on high-performance cmputing environment and parallelly run several lines of codes simultaneously. 
 
-Requirement:
-[GNU parallel](http://www.gnu.org/software/parallel/)
 
 My work flow is:
 
