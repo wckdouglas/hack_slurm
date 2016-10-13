@@ -14,9 +14,10 @@ $ batch_del ${JOB_NAME} # This grep everything from the slurm queue
 ```
 
 Usage:
+
 ```
 usage: slurmJob.py [-h] -c CMDLST [-j JOBNAME] [-N NUMBEROFNODE]
-                   [-n NUMBEROFJOB]
+                   [-n NUMBEROFCMD]
                    [-A {Exosome-RNA-seq,tRNA-profiling-and-b,2013lambowitz}]
                    [-t TIME] [-q QUEUE] [-p PROCESSES]
 
@@ -29,9 +30,9 @@ optional arguments:
   -j JOBNAME, --jobname JOBNAME
                         Jobname (default: job)
   -N NUMBEROFNODE, --numberOfNode NUMBEROFNODE
-                        Number of node for each command (default: 1)
-  -n NUMBEROFJOB, --numberOfJob NUMBEROFJOB
-                        Number of job per node (default: 1)
+                        Number of node for each job (default: 1)
+  -n NUMBEROFCMD, --numberOfCmd NUMBEROFCMD
+                        Number of command per node (default: 1)
   -A {Exosome-RNA-seq,tRNA-profiling-and-b,2013lambowitz}, --allocation {Exosome-RNA-seq,tRNA-profiling-and-b,2013lambowitz}
                         Account (default: 2013lambowitz)
   -t TIME, --time TIME  Run time (hh:mm:ss) default: 1:00:00
