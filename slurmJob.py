@@ -15,14 +15,15 @@ def writeJob(commandlist, jobname, commandRank, numberOfJob, numberOfNode, alloc
 	"#SBATCH -p %s    # Queue name \n"                  %(queue)+\
 	"#SBATCH -o %s.o%s # Name of stdout output file \n" %(jobname,'%j')+ \
 	"#SBATCH -t %s # Run time (hh:mm:ss) \n"            %time +\
-	"#SBATCH -A %s \nmodule load gcc\n"                           %(allocation)  +\
+	"#SBATCH -A %s \nmodule load gcc\nmodule load java\n" %(allocation)  +\
+        'ulimit -c unlimited\n' +\
         "export PATH=%s:$PATH\n"  %('/'.join(subprocess.check_output(['which' ,'python']).split('/')[:-1]))
     with open('launcher_%i.slurm' %(commandRank), 'w') as slurmFile:
 	slurmFile.write(options)
         if concurrent_job == 1:
             slurmFile.write('bash %s \n' %(commandFiles)) 
         else:
-            slurmFile.write('parallel -j%i :::: %s \n' %(concurrent_job,commandFiles)) 
+            slurmFile.write('run_parallel.py -j%i %s \n' %(concurrent_job,commandFiles)) 
     with open(commandFiles,'w') as commandFile:
         commandFile.write('\n'.join(commandlist) + '\n')
     return 0
@@ -30,7 +31,7 @@ def writeJob(commandlist, jobname, commandRank, numberOfJob, numberOfNode, alloc
 def main(args):
     commandFile = args.cmdlst
     jobname = args.jobname
-    numberOfJob = args.numberOfJob
+    numberOfJob = args.numberOfCmd
     numberOfNode = args.numberOfNode
     allocation = args.allocation
     queue = args.queue	
