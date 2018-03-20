@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
+from builtins import str, bytes
 import fileinput
 import argparse
 import os
 import sys
 import subprocess
+
+python_path = subprocess.check_output(['which' ,'python']).decode('utf-8')
+system_path = os.path.dirname(python_path)
 
 def writeJob(commandlist, jobname, commandRank, numberOfJob, numberOfNode, allocation, queue, time, concurrent_job):
     commandFiles = 'command_%i.bash' %commandRank
@@ -19,7 +23,7 @@ def writeJob(commandlist, jobname, commandRank, numberOfJob, numberOfNode, alloc
         "#SBATCH -t %s # Run time (hh:mm:ss) \n"            %time +\
         "#SBATCH -A %s \nmodule load gcc\nmodule load java\n" %(allocation)  +\
         'ulimit -c unlimited\n' +\
-        "export PATH=%s:$PATH"  %('/'.join(str(subprocess.check_output(['which' ,'python'])).split('/')[:-1]))
+        "export PATH=%s:$PATH"  %system_path
     with open('launcher_%i.slurm' %(commandRank), 'w') as slurmFile:
         print(options, file = slurmFile)
         if concurrent_job == 1:
